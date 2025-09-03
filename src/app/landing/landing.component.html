@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand bg-primary navbar-dark px-4 py-2 shadow-sm">
+  <a class="navbar-brand fw-bold fs-4" href="#">JobBoard</a>
+
+  <ul class="navbar-nav ms-auto d-flex align-items-center">
+    <li class="nav-item me-3">
+      <a class="btn btn-warning fw-semibold" [routerLink]="['/signin']">Post a Job</a>
+
+      <a class="btn btn-outline-light text-primary" [routerLink]="['/signin']">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="btn btn-light text-primary fw-semibold" [routerLink]="['/signup']">Sign Up</a>
+    </li>
+  </ul>
+</nav>
+
+
+
+<section class="hero-section text-white d-flex flex-column justify-content-center align-items-center text-center py-5" style="background: linear-gradient(to right, #0d6efd, #3a8dfd); min-height: 60vh;">
+  <div class="container">
+    <h1 class="display-4 fw-bold mb-3">Find Your Dream Job</h1>
+    <p class="lead mb-4">Search thousands of job listings from top companies. Fast, free, and easy to use.</p>
+
+    <form class="row g-2 justify-content-center">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Job title or keyword">
+      </div>
+      <div class="col-md-3">
+        <input type="text" class="form-control" placeholder="Location">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-light w-100 fw-semibold">Search</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="container my-5">
+  <h2 class="mb-4 text-center">Featured Jobs</h2>
+  <div class="row">
+    @for (job of featuredJobs; track job) {
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ job.title }}</h5>
+            <p class="card-text">{{ job.company }}</p>
+            <a [routerLink]="['/jobs', job.id]" class="btn btn-outline-primary">View Job</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

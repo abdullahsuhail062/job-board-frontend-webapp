@@ -1,0 +1,41 @@
+.dropdown-item{
+  cursor: pointer;
+}
+
+::ng-deep .dialog-slide-in {
+  margin-right: 20px;
+  border-radius: 8px 0 0 8px;
+  animation: slideIn 0.3s ease-out;
+  height: auto;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive fallback: center on small screens */
+@media (max-width: 768px) {
+  ::ng-deep .dialog-slide-in {
+    margin: auto;
+    width: 90% !important;
+    border-radius: 8px;
+  }
+}
+
+.badge {
+  font-size: 0.6rem;
+  padding: 0.4em 0.5em;
+}
+.dropdown-menu {
+  width: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+

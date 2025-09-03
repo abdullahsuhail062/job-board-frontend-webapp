@@ -1,0 +1,26 @@
+@if (visible) {
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content rounded-3 shadow-lg">
+        <div class="modal-header">
+          <h5 class="modal-title">Share This App</h5>
+          <button type="button" class="btn-close" (click)="close()"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="mb-3">Share this app with others via:</p>
+          <div class="d-flex justify-content-around flex-wrap gap-3">
+            <a [href]="twitterUrl" target="_blank" class="btn btn-outline-primary">Twitter</a>
+            <a [href]="facebookUrl" target="_blank" class="btn btn-outline-primary">Facebook</a>
+            <a [href]="whatsappUrl" target="_blank" class="btn btn-outline-success">WhatsApp</a>
+            <a [href]="linkedinUrl" target="_blank" class="btn btn-outline-info">LinkedIn</a>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="close()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+
