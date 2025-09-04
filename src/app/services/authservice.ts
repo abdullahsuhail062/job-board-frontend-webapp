@@ -145,6 +145,16 @@ export class Authservice {
       return null;
     }
   }
+    getUserId(): number | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.id ?? null;
+  }
+
+   getUsername(): string | null {
+    const decoded = this.getDecodedToken();
+    
+    return decoded?.username ?? null;
+  }
 
   setAvatar(avatar: string) {
     if (this.isBrowser()) {
