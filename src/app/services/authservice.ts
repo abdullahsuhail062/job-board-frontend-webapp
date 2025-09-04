@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import {jwtDecode} from 'jwt-decode';
+ import {jwtDecode} from 'jwt-decode';
 export interface DecodedToken {
   id: number;
   email: string;
