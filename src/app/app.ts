@@ -10,7 +10,7 @@ import { DarkModeService } from './dark-mode.service';
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
-  protected readonly title = signal('job-board-frontendApp');
+  //protected readonly title = signal('job-board-frontendApp');
    constructor(private darkModeService: DarkModeService ,private authService: Authservice, private router: Router){}
 
 ngOnInit(): void {
