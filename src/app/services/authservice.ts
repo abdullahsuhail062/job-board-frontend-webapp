@@ -1,7 +1,112 @@
-import { Injectable } from '@angular/core';
+// import { Injectable } from '@angular/core';
+// import { Router } from '@angular/router';
+//  import {jwtDecode} from 'jwt-decode';
+//  localStorage
+// export interface DecodedToken {
+//   id: number;
+//   email: string;
+//   exp: number;
+//   iat: number;
+//   username: string;
+//   avatar: string;
+// }
+
+// @Injectable({
+//   providedIn: 'root'
+// })
+
+// export class Authservice {
+
+//   private avatarKey = 'auth_avatar_key'  
+//   private tokenKey = 'auth_token';
+//   private tokenExpiryKey = 'token_expires_at'
+
+//   constructor(private router: Router) { }
+//    getDecodedToken(): DecodedToken | null {
+//     const token = localStorage.getItem(this.tokenKey); 
+//     if (!token) return null;
+
+//     try {
+//       return jwtDecode<DecodedToken>(token);
+//     } catch (error) {
+//       console.error('Invalid token:', error);
+//       return null;
+//     }
+//   }
+  
+
+//   getUserId(): number | null {
+//     const decoded = this.getDecodedToken();
+//     return decoded?.id ?? null;
+//   }
+
+//    getUsername(): string | null {
+//     const decoded = this.getDecodedToken();
+    
+//     return decoded?.username ?? null;
+//   }
+
+//   setAvatar(avatar: string){
+//     localStorage.setItem(this.avatarKey, avatar)
+//   }
+
+//   getAvatar(){
+//     const avatar = localStorage.getItem(this.avatarKey)
+//     return 
+//   }
+
+
+
+//   setToken(token: string): void {
+//     const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hour in ms
+//     localStorage.setItem(this.tokenKey, token);
+//     localStorage.setItem(this.tokenExpiryKey, expiresAt.toString());
+//   }
+
+//   // Get the stored token
+//   getToken(): string | null {
+//     if (this.isTokenExpired()) {
+//       return null;
+//     }
+//     return localStorage.getItem(this.tokenKey);
+//   }
+
+//   // Check if token is expired
+//   isTokenExpired(): boolean {
+//   const expiry = localStorage.getItem(this.tokenExpiryKey);
+//   if (!expiry) return true;
+
+//   const isExpired = Date.now() > parseInt(expiry, 10);
+
+//   if (isExpired) {
+//     this.logout(); // only logout if expired
+//   }
+
+//   return isExpired;
+// }
+
+
+//   // Is user logged in (and token valid)?
+//   isLoggedIn(): boolean {
+//     return !!this.getToken();
+//   }
+
+//   // Clear token and expiry
+//   logout(): void {
+//     localStorage.removeItem(this.tokenKey);
+//     localStorage.removeItem(this.tokenExpiryKey);
+//   }
+
+ 
+// }
+
+
+
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
- import {jwtDecode} from 'jwt-decode';
- localStorage
+import { jwtDecode } from 'jwt-decode';
+import { isPlatformBrowser } from '@angular/common';
+
 export interface DecodedToken {
   id: number;
   email: string;
@@ -14,15 +119,22 @@ export interface DecodedToken {
 @Injectable({
   providedIn: 'root'
 })
-
 export class Authservice {
-
-  private avatarKey = 'auth_avatar_key'  
+  private avatarKey = 'auth_avatar_key';  
   private tokenKey = 'auth_token';
-  private tokenExpiryKey = 'token_expires_at'
+  private tokenExpiryKey = 'token_expires_at';
 
-  constructor(private router: Router) { }
-   getDecodedToken(): DecodedToken | null {
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
+    getDecodedToken(): DecodedToken | null {
+    if (!this.isBrowser()) return null;  // SSR guard
     const token = localStorage.getItem(this.tokenKey); 
     if (!token) return null;
 
@@ -33,69 +145,48 @@ export class Authservice {
       return null;
     }
   }
-  
 
-  getUserId(): number | null {
-    const decoded = this.getDecodedToken();
-    return decoded?.id ?? null;
+  setAvatar(avatar: string) {
+    if (this.isBrowser()) {
+      localStorage.setItem(this.avatarKey, avatar);
+    }
   }
 
-   getUsername(): string | null {
-    const decoded = this.getDecodedToken();
-    
-    return decoded?.username ?? null;
+  getAvatar(): string | null {
+    if (!this.isBrowser()) return null;
+    return localStorage.getItem(this.avatarKey);
   }
-
-  setAvatar(avatar: string){
-    localStorage.setItem(this.avatarKey, avatar)
-  }
-
-  getAvatar(){
-    const avatar = localStorage.getItem(this.avatarKey)
-    return 
-  }
-
-
 
   setToken(token: string): void {
-    const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hour in ms
+    if (!this.isBrowser()) return;
+    const expiresAt = Date.now() + 60 * 60 * 1000;
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem(this.tokenExpiryKey, expiresAt.toString());
   }
 
-  // Get the stored token
   getToken(): string | null {
-    if (this.isTokenExpired()) {
-      return null;
-    }
+    if (!this.isBrowser() || this.isTokenExpired()) return null;
     return localStorage.getItem(this.tokenKey);
   }
 
-  // Check if token is expired
   isTokenExpired(): boolean {
-  const expiry = localStorage.getItem(this.tokenExpiryKey);
-  if (!expiry) return true;
+    if (!this.isBrowser()) return true;
+    const expiry = localStorage.getItem(this.tokenExpiryKey);
+    if (!expiry) return true;
 
-  const isExpired = Date.now() > parseInt(expiry, 10);
+    const isExpired = Date.now() > parseInt(expiry, 10);
+    if (isExpired) this.logout();
 
-  if (isExpired) {
-    this.logout(); // only logout if expired
+    return isExpired;
   }
 
-  return isExpired;
-}
-
-
-  // Is user logged in (and token valid)?
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
 
-  // Clear token and expiry
   logout(): void {
+    if (!this.isBrowser()) return;
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.tokenExpiryKey);
   }
-
- 
 }
