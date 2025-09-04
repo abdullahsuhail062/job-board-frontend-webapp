@@ -4,7 +4,6 @@ import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuardService } from './service/auth-guard.service';
-import { Authservice } from './services/authservice';
 import { AuthGuardServiceService } from './auth-guard-service-service';
 import { AdminNotificationComponent } from './admin-notification/admin-notification.component';
 import { AdminGuard } from './guards/admin.guard';
